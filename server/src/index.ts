@@ -1,17 +1,17 @@
-import express, { Request, Response } from 'express';
-import cors from 'cors';
+import express from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import authRoutes from "./routes/auth.routes";
+import { config } from "./config/dotenv.config";
 
 const app = express();
-const PORT: number = 5000;
 
-app.use(cors());
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json());
+app.use(cookieParser());
 
-app.get('/', (req: Request, res: Response): void => {
-  res.send('Server is running!');
-});
+app.use("/api/auth", authRoutes);
 
-
-app.listen(PORT, (): void => {
-  console.log(`Server started at http://localhost:${PORT}`);
+app.listen(config.port, () => {
+  console.log(`Server is running at http://localhost:${config.port}`);
 });
