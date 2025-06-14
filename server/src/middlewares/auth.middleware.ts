@@ -4,7 +4,7 @@ import { config } from '../config/dotenv.config';
 
 export const authenticate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const token = req.cookies?.token;
+    const token = req.cookies?.authToken;
     if (!token) throw new Error('Unauthorized');
 
     const decoded = jwt.verify(token, config.jwtSecret) as any;
