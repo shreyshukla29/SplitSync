@@ -42,11 +42,12 @@ model GroupMember {
   id        String   @id @default(uuid())
   userId    String
   groupId   String
-  role      String   @default("member") // or enum: ADMIN, MEMBER
+  role      String   @default("member")
   joinedAt  DateTime @default(now())
 
   user      User     @relation(fields: [userId], references: [id])
   group     Group    @relation(fields: [groupId], references: [id])
+  @@unique([userId, groupId]) 
 }
 
 model Expense {
