@@ -9,7 +9,6 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 
     const decoded = jwt.verify(token, config.jwtSecret) as any;
     (req as any).user = decoded;
-
      next();
   } catch (err) {
      res.status(401).json({ error: 'Invalid or expired token' });

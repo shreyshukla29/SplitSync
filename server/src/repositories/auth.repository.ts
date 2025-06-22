@@ -1,16 +1,11 @@
 import prisma from "../config/prisma.client";
 import { Prisma, User } from "@prisma/client";
+import { ConflictError } from "../utils/errors/ConflictError";
+import { NotFoundError } from './../utils/errors/NotFoundError';
 
 export const AuthRepository = {
   findUserByEmail: async (email: string): Promise<User | null> => {
-    try {
-      return await prisma.user.findUnique({
-        where: { email: email.trim().toLowerCase() },
-      });
-    } catch (error) {
-      console.error("Error finding user by email:", error);
-      throw new Error("Database error while fetching user by email");
-    }
+    return prisma.user.findUnique({ where: { email: email.trim().toLowerCase() } });
   },
 
   createUser: async (data: {
@@ -27,24 +22,16 @@ export const AuthRepository = {
         },
       });
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === "P2002") {
-          // Unique constraint failed (email already exists)
-          throw new Error("Email already exists");
-        }
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+        throw new ConflictError("Email already exists");
       }
-
-      console.error("Error creating user:", error);
-      throw new Error("Database error while creating user");
+      throw error;
     }
   },
 
   findUserById: async (id: string): Promise<User | null> => {
-    try {
-      return await prisma.user.findUnique({ where: { id } });
-    } catch (error) {
-      console.error("Error finding user by ID:", error);
-      throw new Error("Database error while fetching user by ID");
-    }
+    const user = await prisma.user.findUnique({ where: { id } });
+    if (!user) throw new NotFoundError("User");
+    return user;
   },
 };
