@@ -4,7 +4,7 @@ import { UserService } from '../services/user.service';
 export const getMe = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = await UserService.getMe(req.user.id);
-    res.json(user);
+    res.status(201).json({success:true,message:"User found",user});
   } catch (err) {
     next(err);
   }
@@ -13,7 +13,7 @@ export const getMe = async (req: Request, res: Response, next: NextFunction) => 
 export const updateProfile = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = await UserService.updateProfile(req.user.id, req.body);
-    res.json(user);
+    res.status(201).json({success:"true",message:"profile updated",user});
   } catch (err) {
     next(err);
   }
@@ -23,7 +23,7 @@ export const changePassword = async (req: Request, res: Response, next: NextFunc
   try {
     const { currentPassword, newPassword } = req.body;
     await UserService.changePassword(req.user.id, currentPassword, newPassword);
-    res.json({ message: 'Password updated successfully' });
+    res.status(201).json({success:true, message: 'Password updated successfully' });
   } catch (err) {
     next(err);
   }

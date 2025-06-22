@@ -1,5 +1,7 @@
 import prisma from "../config/prisma.client";
 import { Prisma, User } from "@prisma/client";
+import { AppError } from "../utils/AppError";
+import { NotFoundError } from './../utils/errors/NotFoundError';
 
 export const UserRepository = {
   getById: async (id: string): Promise<User | null> => {
@@ -8,8 +10,8 @@ export const UserRepository = {
         where: { id: id.trim() },
       });
     } catch (error) {
-      console.error("Error fetching user by ID:", error);
-      throw new Error("Failed to fetch user");
+      console.error("UserRepository.getById Error:", error);
+      throw new AppError("Failed to fetch user", 500);
     }
   },
 
@@ -27,11 +29,11 @@ export const UserRepository = {
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === "P2025"
       ) {
-        throw new Error("User not found for update");
+        throw new NotFoundError("User for update");
       }
 
-      console.error("Error updating user:", error);
-      throw new Error("Failed to update user");
+      console.error("UserRepository.updateById Error:", error);
+      throw new AppError("Failed to update user", 500);
     }
   },
 
@@ -46,11 +48,11 @@ export const UserRepository = {
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === "P2025"
       ) {
-        throw new Error("User not found for password update");
+        throw new NotFoundError("User for password update");
       }
 
-      console.error("Error changing password:", error);
-      throw new Error("Failed to change password");
+      console.error("UserRepository.changePassword Error:", error);
+      throw new AppError("Failed to change password", 500);
     }
   },
 
@@ -64,11 +66,11 @@ export const UserRepository = {
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === "P2025"
       ) {
-        throw new Error("User not found for deletion");
+        throw new NotFoundError("User for deletion");
       }
 
-      console.error("Error deleting user:", error);
-      throw new Error("Failed to delete user");
+      console.error("UserRepository.deleteUser Error:", error);
+      throw new AppError("Failed to delete user", 500);
     }
   },
 };

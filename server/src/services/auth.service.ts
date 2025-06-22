@@ -87,7 +87,6 @@ export const AuthService = {
       if (!userId || typeof userId !== "string") {
         throw new BadRequestError("Invalid user ID");
       }
-
       const user = await AuthRepository.findUserById(userId);
       if (!user) {
         throw new NotFoundError("User");
