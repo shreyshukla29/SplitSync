@@ -5,18 +5,22 @@ import {
   createGroupSchema,
   addUserToGroupSchema,
 } from "../validators/group.validator";
-
+import { authenticate } from "./../middlewares/auth.middleware";
 const router = express.Router();
 
-router.post("/", validate(createGroupSchema), groupController.createGroup);
-router.get("/:groupId", groupController.getGroupById);
-router.get("/", groupController.getGroupByName);
-router.get("/user/:userId", groupController.getGroupsByUserId);
+router.post(
+  "/",
+  authenticate,
+  validate(createGroupSchema),
+  groupController.createGroup
+);
+router.get("/:groupId", authenticate, groupController.getGroupById);
+router.get("/", authenticate, groupController.getGroupByName);
+router.get("/user/:userId", authenticate, groupController.getGroupsByUserId);
 router.post(
   "/:groupId/users",
   validate(addUserToGroupSchema),
   groupController.addUserToGroup
 );
-router.delete("/:groupId/users/:userId", groupController.removeUserFromGroup);
-
+router.delete("/:groupId/users/:userId",authenticate,groupController.removeUserFromGroup);
 export default router;
