@@ -14,7 +14,7 @@ app.use(cookieParser());
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user", userRoutes);
-app.use('/api/groups', groupRoutes);
+app.use('/api/v1/groups', groupRoutes);
 app.use(errorHandler);
 app.listen(config.port, () => {
   console.log(`Server is running at http://localhost:${config.port}`);

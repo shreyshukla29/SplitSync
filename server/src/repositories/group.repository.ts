@@ -1,16 +1,34 @@
-import prisma from '../config/prisma.client';
-import { Group, GroupMember, Prisma } from '@prisma/client';
-import {  AppError } from '../utils/AppError';
-import { ConflictError } from './../utils/errors/ConflictError';
-import { NotFoundError } from './../utils/errors/NotFoundError';
+import prisma from "../config/prisma.client";
+import { Group, GroupMember, Prisma } from "@prisma/client";
+import { AppError } from "../utils/AppError";
+import { ConflictError } from "./../utils/errors/ConflictError";
+import { NotFoundError } from "./../utils/errors/NotFoundError";
 
 type FullGroup = Prisma.GroupGetPayload<{
   include: {
-    members: { include: { user: true } },
-    expenses: true,
-    settlements: true
-  }
+  members: {
+      include: {
+        user: {
+          select: {
+            id: true;
+            name: true;
+            email: true;
+            upiId: true;
+          };
+        };
+      };
+    };
+    expenses: true;
+    settlements: true;
+  };
 }>;
+
+const publicUserFields = {
+  id: true,
+  name: true,
+  email: true,
+  upiId: true,
+};
 
 export const groupRepository = {
   async createGroup(name: string): Promise<Group> {
@@ -19,11 +37,11 @@ export const groupRepository = {
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === 'P2002'
+        error.code === "P2002"
       ) {
-        throw new ConflictError('Group name already exists');
+        throw new ConflictError("Group name already exists");
       }
-      throw new AppError('Failed to create group', 500);
+      throw new AppError("Failed to create group", 500);
     }
   },
 
@@ -32,13 +50,13 @@ export const groupRepository = {
       return await prisma.group.findUnique({
         where: { id: id.trim() },
         include: {
-          members: { include: { user: true } },
+          members: { include: { user: { select: publicUserFields } } },
           expenses: true,
           settlements: true,
         },
       });
     } catch (error) {
-      throw new AppError('Failed to fetch group', 500);
+      throw new AppError("Failed to fetch group", 500);
     }
   },
 
@@ -48,7 +66,7 @@ export const groupRepository = {
         where: { name: name.trim() },
       });
     } catch (error) {
-      throw new AppError('Failed to fetch group by name', 500);
+      throw new AppError("Failed to fetch group by name", 500);
     }
   },
 
@@ -63,15 +81,18 @@ export const groupRepository = {
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === 'P2002'
+        error.code === "P2002"
       ) {
-        throw new ConflictError('User already added to the group');
+        throw new ConflictError("User already added to the group");
       }
-      throw new AppError('Failed to add user to group', 500);
+      throw new AppError("Failed to add user to group", 500);
     }
   },
 
-  async removeUserFromGroup(userId: string, groupId: string): Promise<GroupMember> {
+  async removeUserFromGroup(
+    userId: string,
+    groupId: string
+  ): Promise<GroupMember> {
     try {
       return await prisma.groupMember.delete({
         where: {
@@ -84,11 +105,11 @@ export const groupRepository = {
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === 'P2025'
+        error.code === "P2025"
       ) {
-        throw new NotFoundError('User not found in group');
+        throw new NotFoundError("User not found in group");
       }
-      throw new AppError('Failed to remove user from group', 500);
+      throw new AppError("Failed to remove user from group", 500);
     }
   },
 
@@ -109,7 +130,7 @@ export const groupRepository = {
         },
       });
     } catch (error) {
-      throw new AppError('Failed to fetch groups for user', 500);
+      throw new AppError("Failed to fetch groups for user", 500);
     }
   },
 };

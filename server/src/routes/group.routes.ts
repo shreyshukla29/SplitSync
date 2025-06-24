@@ -9,7 +9,7 @@ import { authenticate } from "./../middlewares/auth.middleware";
 const router = express.Router();
 
 router.post(
-  "/",
+  "/create",
   authenticate,
   validate(createGroupSchema),
   groupController.createGroup
