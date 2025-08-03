@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
-import Signup from './pages/Signup';
+import Signup from './pages/SignUp/Signup';
 import Onboarding from './pages/Onboarding';
 import Dashboard from './pages/Dashboard';
 import GroupDetails from './pages/GroupDetails';
@@ -10,20 +10,20 @@ import Transactions from './pages/Transactions';
 import Profile from './pages/Profile';
 import SidebarNav from './components/SidebarNav';
 import Topbar from './components/Topbar';
+import {ROUTE} from "./types/routes"
+import { useSelector } from 'react-redux';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const isAuthenticated = useSelector((state)=> state.auth.isAuthenticated);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
   const [currentUser] = useState({ name: 'Shrey', email: 'shrey@example.com' });
 
   const handleSignup = () => {
-    setIsAuthenticated(true);
     setShowOnboarding(true);
   };
 
   const handleLogin = () => {
-    setIsAuthenticated(true);
     setShowOnboarding(false);
   };
 
@@ -32,7 +32,6 @@ function App() {
   };
 
   const toggleAuth = () => {
-    setIsAuthenticated(!isAuthenticated);
     setShowOnboarding(false);
   };
 
@@ -44,10 +43,10 @@ function App() {
         <Router>
           {!isAuthenticated ? (
             <Routes>
-              <Route path="/" element={<Landing />} />
-              <Route path="/login" element={<Login onLogin={handleLogin} />} />
-              <Route path="/signup" element={<Signup onSignup={handleSignup} />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route path={ROUTE.LANDING} element={<Landing />} />
+              <Route path={ROUTE.SIGNIN} element={<Login onLogin={handleLogin} />} />
+              <Route path={ROUTE.SIGNUP} element={<Signup onSignup={handleSignup} />} />
+              <Route path="*" element={<Navigate to={ROUTE.LANDING} replace />} />
             </Routes>
           ) : showOnboarding ? (
             <Onboarding 
@@ -67,11 +66,11 @@ function App() {
                 <main className="flex-1 overflow-x-hidden overflow-y-auto p-6">
                   <Routes>
                     <Route path="/" element={<Dashboard />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/groups/:groupId" element={<GroupDetails />} />
-                    <Route path="/transactions" element={<Transactions />} />
-                    <Route path="/profile" element={<Profile user={currentUser} onLogout={toggleAuth} />} />
-                    <Route path="*" element={<Navigate to="/dashboard" replace />} />
+                    <Route path={ROUTE.DASHBOARD} element={<Dashboard />} />
+                    <Route path={ROUTE.GROUP_DETAILS} element={<GroupDetails />} />
+                    <Route path={ROUTE.TRANSACTIONS} element={<Transactions />} />
+                    <Route path={ROUTE.PROFILE} element={<Profile user={currentUser} onLogout={toggleAuth} />} />
+                    <Route path="*" element={<Navigate to={ROUTE.DASHBOARD} replace />} />
                   </Routes>
                 </main>
               </div>

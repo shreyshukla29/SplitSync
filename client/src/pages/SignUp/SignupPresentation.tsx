@@ -1,36 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 
-interface SignupProps {
-  onSignup: () => void;
+interface Props {
+  formValues: { fullName: string; email: string; password: string };
+  errors: { [key: string]: string };
+  showPassword: boolean;
+  onChange: (field: keyof typeof formValues, value: string) => void;
+  onTogglePassword: () => void;
+  onSubmit: (e: React.FormEvent) => void;
 }
 
-function Signup({ onSignup }: SignupProps) {
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  const validateForm = () => {
-    const newErrors: { [key: string]: string } = {};
-    
-    if (!fullName.trim()) newErrors.fullName = 'Full name is required';
-    if (!email.trim()) newErrors.email = 'Email is required';
-    if (password.length < 6) newErrors.password = 'Password must be at least 6 characters';
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (validateForm()) {
-      onSignup();
-    }
-  };
-
+const SignupForm: React.FC<Props> = ({
+  formValues,
+  errors,
+  showPassword,
+  onChange,
+  onTogglePassword,
+  onSubmit,
+})=>{
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="max-w-md w-full">
@@ -40,7 +29,7 @@ function Signup({ onSignup }: SignupProps) {
             <p className="text-gray-300">Create your account</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={onSubmit} className="space-y-6">
             <div>
               <label htmlFor="fullName" className="block text-sm font-medium text-gray-200 mb-2">
                 Full Name
@@ -48,8 +37,8 @@ function Signup({ onSignup }: SignupProps) {
               <input
                 type="text"
                 id="fullName"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
+                value={formValues.fullName}
+                onChange={(e) => onChange('fullName', e.target.value)}
                 className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300"
                 placeholder="Enter your full name"
                 required
@@ -66,8 +55,8 @@ function Signup({ onSignup }: SignupProps) {
               <input
                 type="email"
                 id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={formValues.email}
+                onChange={(e) => onChange('email', e.target.value)}
                 className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300"
                 placeholder="Enter your email"
                 required
@@ -85,15 +74,15 @@ function Signup({ onSignup }: SignupProps) {
                 <input
                   type={showPassword ? 'text' : 'password'}
                   id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={formValues.password}
+                  onChange={(e) => onChange('password', e.target.value)}
                   className="w-full px-4 py-3 pr-12 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300"
                   placeholder="Enter your password"
                   required
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={onTogglePassword}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors duration-200"
                 >
                   {showPassword ? (
@@ -133,4 +122,4 @@ function Signup({ onSignup }: SignupProps) {
   );
 }
 
-export default Signup;
+export default SignupForm;
