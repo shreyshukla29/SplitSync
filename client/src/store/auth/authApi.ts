@@ -14,5 +14,5 @@ export const signupApi = async (data: SignupPayload): Promise<User> => {
 };
 
 export const logoutApi = async (): Promise<void> => {
-  await axiosInstance.post('/auth/logout');
+  await axiosInstance.post('/auth/signout');
 };

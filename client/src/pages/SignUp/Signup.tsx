@@ -30,7 +30,7 @@ const SignupPage: React.FC = () => {
     );
 
     if (signupThunk.fulfilled.match(resultAction)) {
-      navigate('/dashboard'); // redirect after successful signup
+      navigate('/dashboard');
     }
   };
 

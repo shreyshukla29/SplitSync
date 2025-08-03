@@ -6,6 +6,7 @@ const getUserFromStorage = (): User | null => {
   try {
     const user = localStorage.getItem("user");
     return user ? JSON.parse(user) : null;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err: unknown) {
     return null;
   }
@@ -71,6 +72,8 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.user = null;
         state.error = null;
+        localStorage.removeItem("isAuthenticated");
+        localStorage.removeItem("user")
       });
   },
 });
