@@ -1,21 +1,27 @@
-import React, { useState } from 'react';
+// src/components/SignInForm.tsx
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { EyeIcon, EyeSlashIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 
-interface LoginProps {
-  onLogin: () => void;
+interface SignInFormProps {
+  email: string;
+  setEmail: (val: string) => void;
+  password: string;
+  setPassword: (val: string) => void;
+  showPassword: boolean;
+  setShowPassword: (val: boolean) => void;
+  handleSubmit: (e: React.FormEvent) => void;
 }
 
-function Login({ onLogin }: LoginProps) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onLogin();
-  };
-
+const SignInForm: React.FC<SignInFormProps> = ({
+  email,
+  setEmail,
+  password,
+  setPassword,
+  showPassword,
+  setShowPassword,
+  handleSubmit,
+}) => {
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="max-w-md w-full">
@@ -60,11 +66,7 @@ function Login({ onLogin }: LoginProps) {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors duration-200"
                 >
-                  {showPassword ? (
-                    <EyeSlashIcon className="h-5 w-5" />
-                  ) : (
-                    <EyeIcon className="h-5 w-5" />
-                  )}
+                  {showPassword ? <EyeSlashIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
                 </button>
               </div>
             </div>
@@ -80,7 +82,7 @@ function Login({ onLogin }: LoginProps) {
 
           <div className="mt-6 text-center">
             <p className="text-gray-300">
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link
                 to="/signup"
                 className="text-indigo-400 hover:text-indigo-300 hover:underline transition-colors duration-200"
@@ -93,6 +95,6 @@ function Login({ onLogin }: LoginProps) {
       </div>
     </div>
   );
-}
+};
 
-export default Login;
+export default SignInForm;

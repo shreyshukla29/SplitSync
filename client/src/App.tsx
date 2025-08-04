@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useSelector } from 'react-redux';
 
 import Landing from './pages/Landing';
-import Login from './pages/Login';
+import Login from './pages/SignIn/Signin';
 import Signup from './pages/SignUp/Signup';
 import Dashboard from './pages/Dashboard';
 import GroupDetails from './pages/GroupDetails';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSignupForm } from './useSignupForm';
-import SignupForm from './SignupPresentation';
+import SignupForm from './SignupForm';
 import { useAppDispatch } from './../../hooks/useAppDispatch';
 import {signupThunk} from "../../store/auth/authThunk"
 const SignupPage: React.FC = () => {
