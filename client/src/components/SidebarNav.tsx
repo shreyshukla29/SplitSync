@@ -43,14 +43,14 @@ function SidebarNav({ onLogout }: SidebarNavProps) {
       {/* Mobile menu button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white/10 backdrop-blur-lg rounded-xl text-white hover:bg-white/20 transition-all duration-300"
+        className=" fixed top-4 left-4 z-50 p-2 bg-white/10 backdrop-blur-lg rounded-xl text-white hover:bg-white/20 transition-all duration-300"
       >
         {isOpen ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
       </button>
 
       {/* Sidebar */}
       <div className={`fixed inset-y-0 left-0 z-40 w-20 lg:w-64 bg-white/10 backdrop-blur-lg shadow-xl rounded-r-2xl border-r border-white/20 transition-transform duration-300 ${
-        isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+        isOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
         <div className="flex flex-col h-full p-4">
           {/* Logo */}

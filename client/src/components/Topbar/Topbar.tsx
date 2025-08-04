@@ -14,7 +14,7 @@ const Topbar: React.FC<TopbarProps> = ({ darkMode, onToggleDarkMode }) => {
 
   return (
     <header className="sticky top-0 z-30 bg-white/10 backdrop-blur-sm border-b border-white/20 p-4">
-      <div className="flex justify-between items-center ml-20 lg:ml-0">
+      <div className="flex justify-between items-center ml-20 ">
         <h1 className="text-xl font-semibold text-gray-100">
           Hey, {user?.name}! 👋
         </h1>

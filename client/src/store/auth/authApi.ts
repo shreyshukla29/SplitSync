@@ -4,7 +4,7 @@ import axiosInstance from './../../utils/axiosinstance';
 
 
 export const loginApi = async (data: LoginPayload): Promise<User> => {
-  const res = await axiosInstance.post('/auth/login', data);
+  const res = await axiosInstance.post('/auth/signin', data);
   return res.data;
 };
 
