@@ -32,7 +32,7 @@ export const UserRepository = {
         throw new NotFoundError("User for update");
       }
 
-      console.error("UserRepository.updateById Error:", error);
+
       throw new AppError("Failed to update user", 500);
     }
   },
@@ -51,7 +51,6 @@ export const UserRepository = {
         throw new NotFoundError("User for password update");
       }
 
-      console.error("UserRepository.changePassword Error:", error);
       throw new AppError("Failed to change password", 500);
     }
   },
@@ -68,8 +67,6 @@ export const UserRepository = {
       ) {
         throw new NotFoundError("User for deletion");
       }
-
-      console.error("UserRepository.deleteUser Error:", error);
       throw new AppError("Failed to delete user", 500);
     }
   },
